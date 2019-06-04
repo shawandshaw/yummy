@@ -1,0 +1,31 @@
+{
+  "name": "yummy",
+  "version": "1.0.0",
+  "description": "My classy Nuxt.js project",
+  "author": "shaw",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.5.1",
+    "crypto-js": "^3.1.9-1",
+    "echarts": "^4.1.0",
+    "nuxt": "^2.0.0",
+    "v-distpicker": "^1.1.0",
+    "vue-baidu-map": "^0.21.16",
+    "vuetify": "^1.2.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.10.0",
+    "koa": "^2.6.2",
+    "koa-static": "^5.0.0",
+    "mockjs": "^1.0.1-beta3",
+    "nodemon": "^1.11.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2"
+  }
+}
