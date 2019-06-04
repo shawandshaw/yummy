@@ -68,7 +68,7 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
-    transpile: ["vue-baidu-map"],
+    // transpile: ["vue-baidu-map"],
     extend(config, ctx) { }
   },
   generate: {
