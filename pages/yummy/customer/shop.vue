@@ -211,6 +211,7 @@
 import Card from "@/components/GoodCard";
 import Header from "@/components/HeaderC";
 import axios from "@/plugins/axios";
+import {distanceFunc} from '@/utils/util'
 
 export default {
   components: {
@@ -271,42 +272,11 @@ export default {
       const lat1 = this.shop.address.lat;
       const lng2 = this.receiveInfo.address.lng;
       const lat2 = this.receiveInfo.address.lat;
-      return this.distanceFunc(lng1, lat1, lng2, lat2);
+      return distanceFunc(lng1, lat1, lng2, lat2);
     }
   },
   methods: {
-    getRad(d) {
-      var PI = Math.PI;
-      return (d * PI) / 180.0;
-    },
-    distanceFunc(lng1, lat1, lng2, lat2) {
-      var f = this.getRad((lat1 + lat2) / 2);
-      var g = this.getRad((lat1 - lat2) / 2);
-      var l = this.getRad((lng1 - lng2) / 2);
-      var sg = Math.sin(g);
-      var sl = Math.sin(l);
-      var sf = Math.sin(f);
-      var s, c, w, r, d, h1, h2;
-      var a = 6378137.0; //The Radius of eath in meter.
-      var fl = 1 / 298.257;
-      sg = sg * sg;
-      sl = sl * sl;
-      sf = sf * sf;
-      s = sg * (1 - sl) + (1 - sf) * sl;
-      c = (1 - sg) * (1 - sl) + sf * sl;
-      w = Math.atan(Math.sqrt(s / c));
-      r = Math.sqrt(s * c) / w;
-      d = 2 * w * a;
-      h1 = (3 * r - 1) / 2 / c;
-      h2 = (3 * r + 1) / 2 / s;
-      s = d * (1 + fl * (h1 * sf * (1 - sg) - h2 * (1 - sf) * sg));
-      var kilometer = s / 1000;
-        s = kilometer.toFixed(3);
-      
-      // s = s/1000;
-      // s = s.toFixed(2);//指定小数点后的位数。
-      return s;
-    },
+   
     refreshCart() {
       const app = this;
       axios.post("/api/myCart", JSON.stringify(this.cartItems), {

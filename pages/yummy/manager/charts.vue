@@ -516,22 +516,15 @@ export default {
     created() {
         const app = this;
         Promise.all([
-            axios.get("http://localhost:8080/api/orders"),
-            axios.get("http://localhost:8080/api/customers"),
-            axios.get("http://localhost:8080/api/shops")
+            axios.get("/api/orders"),
+            axios.get("/api/customers"),
+            axios.get("/api/shops")
         ]).then(res => {
             app.orders = res[0].data;
             app.customers = res[1].data;
             app.shops = res[2].data;
             app.setCharts();
         });
-        // let res1=await axios.get("api/orders")
-        // app.orders = res1.data;
-        // let res2=await axios.get("api/customers");
-        // app.customers = res2.data;
-        // let res3=await axios.get("api/shops");
-        // app.shops = res3.data;
-        // app.setCharts();
     }
 };
 </script>

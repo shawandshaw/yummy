@@ -336,7 +336,7 @@ export default {
       const index = this.addressList.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
         axios
-          .put("api/customers", {
+          .put("/api/customers", {
             username: this.infoEditModel.username,
             addressList: this.addressList,
             password: MD5(this.userInfo.password).toString()
@@ -369,7 +369,7 @@ export default {
           receive.address.id = null;
         }
         axios
-          .put("api/customers", {
+          .put("/api/customers", {
             username: this.infoEditModel.username,
             addressList: this.addressList,
             password: MD5(this.userInfo.password).toString()

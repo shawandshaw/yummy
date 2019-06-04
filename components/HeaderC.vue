@@ -30,11 +30,7 @@ export default {
   },
   data() {
     return {
-      address: {
-        name: "",
-        lng: 127,
-        lat: 33
-      },
+      address: {name:'北京',lng: 116.23,lat:39.54},
       showSearch: false,
       menu: [
         {
@@ -104,7 +100,7 @@ export default {
       this.address = address;
       this.showSearch = false;
       axios.post("/api/location", address);
-      this.$emit("located", this.address);
+      this.$emit("located", {...this.address});
     }
   },
   created() {
@@ -113,21 +109,9 @@ export default {
       if (res.data.name) {
         vue.address = res.data;
       } else {
-        var geolocation = new BMap.Geolocation();
-        geolocation.getCurrentPosition(
-          function(r) {
-            if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-              vue.address.lng = r.point.lng;
-              vue.address.lat = r.point.lat;
-              vue.address.name = r.address.city;
-            } else {
-              alert("自动定位失败,请手动选择");
-            }
-          },
-          { enableHighAccuracy: true }
-        );
+        alert("请选择您的位置,方便为您推荐周边商店");
       }
-      this.$emit("located", vue.address);
+      this.$emit("located", {...vue.address});
     });
   }
 };
