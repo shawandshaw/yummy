@@ -3,8 +3,8 @@
     <Header @located="setLocation"></Header>
     <v-content>
       <v-container>
-        <v-tabs color="cyan darken-2" dark icons-and-text v-model="activeTabs">
-          <v-tabs-slider color="black"></v-tabs-slider>
+        <v-tabs color="primary" dark icons-and-text v-model="activeTabs">
+          <v-tabs-slider color="secondary"></v-tabs-slider>
 
           <v-tab href="#tab-address">收货地址
             <v-icon>place</v-icon>
@@ -113,7 +113,7 @@
 
         <v-dialog v-model="infoDialog" width="500">
           <v-card class="elevation-12">
-            <v-toolbar dark color="blue-grey darken-2">
+            <v-toolbar dark color="primary">
               <v-toolbar-title>Info</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon large>
@@ -160,13 +160,13 @@
                 <v-icon>arrow_back</v-icon>cancel
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="blue-grey darken-2" @click="submit" class="white--text">Change</v-btn>
+              <v-btn color="primary" @click="submit" class="white--text">Change</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <v-dialog v-model="addressDialog" width="500">
           <v-card class="elevation-12">
-            <v-toolbar dark color="blue-grey darken-2">
+            <v-toolbar dark color="primary">
               <v-toolbar-title>Address</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon large>
@@ -218,7 +218,7 @@
                 <v-icon>arrow_back</v-icon>cancel
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="blue-grey darken-2" @click="save" class="white--text">save</v-btn>
+              <v-btn color="primary" @click="save" class="white--text">save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>

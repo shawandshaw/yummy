@@ -9,7 +9,7 @@
       </v-badge>
     </Header>
     <v-content>
-      <v-container fluid grid-list-lg>
+      <v-container grid-list-lg>
         <v-layout row wrap fill-height>
           <v-flex v-for="(good,index) in combos" v-bind:key="index+'combo'" lg3 md4 xs12>
             <Card :good="good" type="套餐" v-on:chosen="addToCart"></Card>
@@ -23,7 +23,7 @@
     <v-dialog v-model="cartDialog" width="500">
       <v-card>
         <v-toolbar color="pink" dark>
-          <v-toolbar-title>Shooping Cart</v-toolbar-title>
+          <v-toolbar-title>购物车</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn icon @click="cartItems=[]">
             <v-icon>remove_shopping_cart</v-icon>
@@ -59,8 +59,9 @@
             :disabled="this.cartItems.length==0"
             color="primary"
             flat
+            class=""
             @click="confirmOrder"
-          >Order</v-btn>
+          >下单</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -172,7 +173,7 @@
     </v-dialog>
     <v-dialog v-model="resultDialog" width="500">
       <v-card>
-        <v-toolbar color="blue-grey darken-2" dark>
+        <v-toolbar color="primary" dark>
           <v-toolbar-title>{{this.orderResult.status}}</v-toolbar-title>
         </v-toolbar>
         <v-card-text v-if="orderResult.status=='success'">

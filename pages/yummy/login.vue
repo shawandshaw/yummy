@@ -5,7 +5,7 @@
         <v-flex xs12 sm8 md4>
           <v-card class="elevation-12">
             <v-toolbar dark color="blue-grey darken-2">
-              <v-toolbar-title>SIGN IN</v-toolbar-title>
+              <v-toolbar-title>登录</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon large>
                 <v-icon large>code</v-icon>
@@ -15,15 +15,15 @@
             <v-card-text>
               <v-form>
                 <v-radio-group row prepend-icon="person"  v-model="userType">
-                    <v-radio label="customer" value="customer"></v-radio>
-                    <v-radio label="shop" value="shop"></v-radio>
-                    <v-radio label="manager" value="manager"></v-radio>
+                    <v-radio label="会员" value="customer"></v-radio>
+                    <v-radio label="商店" value="shop"></v-radio>
+                    <v-radio label="管理员" value="manager"></v-radio>
                 </v-radio-group>
                 <v-text-field
                   v-model="email"
                   :prepend-icon="userType=='customer'||userType=='manager'?'email':'home'"
                   name="email"
-                  :label="userType=='customer'||userType=='manager'?'email':'shopId'"
+                  :label="userType=='customer'||userType=='manager'?'邮箱':'商店ID'"
                   type="text"
                 ></v-text-field>
                 <v-text-field
@@ -31,7 +31,7 @@
                   @keyup.enter="submit"
                   prepend-icon="lock"
                   name="password"
-                  label="Password"
+                  label="密码"
                   id="password"
                   type="password"
                 ></v-text-field>
@@ -40,10 +40,10 @@
             </v-card-text>
             <v-card-actions>
               <v-btn to="/yummy/register" flat>
-                <v-icon>arrow_back</v-icon>sign up
+                <v-icon>arrow_back</v-icon>注册
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="blue-grey darken-2" class="white--text" @click="submit">sign in</v-btn>
+              <v-btn color="blue-grey darken-2" class="white--text" @click="submit">登录</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>

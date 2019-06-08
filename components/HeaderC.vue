@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar color="blue-grey darken-2" fixed dark app>
+    <v-toolbar  fixed dark  color="#03a9f4" app>
       <v-toolbar-title class="headline">Yummy</v-toolbar-title>
       <v-btn flat @click="showSearch=true">
         <v-icon>place</v-icon>

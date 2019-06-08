@@ -1,5 +1,5 @@
 <template>
-  <v-card color="cyan darken-2" class="white--text">
+  <v-card  class="black--text">
     <v-img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" aspect-ratio="2.75"></v-img>
     <v-layout>
       <v-flex>

@@ -2,7 +2,7 @@
   <v-menu offset-y origin="center center" :nudge-bottom="10"  transition="slide-y-transition">
     <v-btn icon large flat slot="activator">
       <v-avatar size="30px">
-        <img src="@/assets/logo.png" alt="Michael Wang">
+        <img src="@/assets/avatar.png" alt="Michael Wang">
       </v-avatar>
     </v-btn>
     <v-list class="pa-0">

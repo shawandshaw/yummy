@@ -2,7 +2,7 @@
     <v-app id="home">
         <Header v-on:located="receiveLocation"></Header>
         <v-content>
-            <v-container fluid grid-list-lg>
+            <v-container  grid-list-lg>
                 <v-layout row wrap fill-height>
                     <v-flex v-for="(shop,index) in shops" v-bind:key="index" lg3 md4 xs12>
                         <Card :shop="shop" v-on:chosen="goTo"></Card>

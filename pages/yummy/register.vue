@@ -6,9 +6,9 @@
           <v-tabs grow color="blue-grey darken-2" dark icons-and-text>
             <v-tabs-slider color="white"></v-tabs-slider>
 
-            <v-tab href="#tab-customer">sign up As Customer</v-tab>
+            <v-tab href="#tab-customer" class="title">会员注册</v-tab>
 
-            <v-tab href="#tab-shop">sign up As Shop</v-tab>
+            <v-tab href="#tab-shop" class="title">商家注册</v-tab>
 
             <v-tab-item value="tab-customer">
               <v-card class="elevation-12">
@@ -20,7 +20,7 @@
                       :rules="emailRules"
                       required
                       name="email"
-                      label="email"
+                      label="邮箱"
                       type="text"
                     ></v-text-field>
                     <v-text-field
@@ -29,7 +29,7 @@
                       :rules="notEmptyRules"
                       required
                       name="username"
-                      label="username"
+                      label="用户名"
                       type="text"
                     ></v-text-field>
                     <v-text-field
@@ -37,7 +37,7 @@
                       :rules="passwordRules"
                       prepend-icon="lock"
                       name="password"
-                      label="Password"
+                      label="密码"
                       type="password"
                     ></v-text-field>
                     <v-text-field
@@ -46,21 +46,21 @@
                       v-model="customer.passwordAgain"
                       :rules="customer.passwordAgainRules"
                       name="passwordAgain"
-                      label="Password Again"
+                      label="重复密码"
                       type="password"
                     ></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
                   <v-btn to="/yummy/login" flat>
-                    <v-icon>arrow_back</v-icon>sign in
+                    <v-icon>arrow_back</v-icon>登录
                   </v-btn>
                   <v-spacer></v-spacer>
                   <v-btn
                     color="blue-grey darken-2"
                     @click="customerSignUP"
                     class="white--text"
-                  >sign up</v-btn>
+                  >注册</v-btn>
                 </v-card-actions>
               </v-card>
             </v-tab-item>
@@ -74,7 +74,7 @@
                       :rules="emailRules"
                       required
                       name="email"
-                      label="email"
+                      label="邮箱"
                       type="text"
                     ></v-text-field>
                     <v-text-field
@@ -83,7 +83,7 @@
                       :rules="notEmptyRules"
                       required
                       name="shopname"
-                      label="shopname"
+                      label="商店名称"
                       type="text"
                     ></v-text-field>
                     <v-text-field
@@ -92,7 +92,7 @@
                       required
                       readonly
                       name="address"
-                      label="address"
+                      label="地址"
                       type="text"
                       @keyup.enter="showMap=true"
                       @click="showMap=true"
@@ -110,7 +110,7 @@
                       prepend-icon="class"
                       v-model="shop.type"
                       :items="shopTypes"
-                      label="type"
+                      label="类型"
                     ></v-select>
                     <v-text-field
                       prepend-icon="tag"
@@ -118,7 +118,7 @@
                       required
                       :rules="notEmptyRules"
                       name="description"
-                      label="description"
+                      label="简介"
                       type="text"
                     ></v-text-field>
                     <v-text-field
@@ -126,7 +126,7 @@
                       :rules="passwordRules"
                       prepend-icon="lock"
                       name="password"
-                      label="Password"
+                      label="密码"
                       type="password"
                     ></v-text-field>
                     <v-text-field
@@ -135,17 +135,17 @@
                       v-model="shop.passwordAgain"
                       :rules="shop.passwordAgainRules"
                       name="passwordAgain"
-                      label="Password Again"
+                      label="重复密码"
                       type="password"
                     ></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
                   <v-btn to="/yummy/login" flat>
-                    <v-icon>arrow_back</v-icon>sign in
+                    <v-icon>arrow_back</v-icon>登录
                   </v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue-grey darken-2" @click="shopSignUP" class="white--text">sign up</v-btn>
+                  <v-btn color="blue-grey darken-2" @click="shopSignUP" class="white--text">注册</v-btn>
                 </v-card-actions>
               </v-card>
             </v-tab-item>
@@ -179,9 +179,9 @@ export default {
         password: "",
         passwordAgain: "",
         passwordAgainRules: [
-          v => !!v || "password is required",
+          v => !!v || "密码不能为空",
           v =>
-            (v && v === vue.customer.password) || "Passwords are not the same"
+            (v && v === vue.customer.password) || "密码前后不一致"
         ]
       },
       shop: {
@@ -198,13 +198,13 @@ export default {
         password: "",
         passwordAgain: "",
         passwordAgainRules: [
-          v => !!v || "password is required",
-          v => (v && v === vue.shop.password) || "Passwords are not the same"
+          v => !!v || "密码不能为空",
+          v => (v && v === vue.shop.password) || "密码前后不一致"
         ]
       },
       notEmptyRules: [v => !!v || "此项不能为空"],
       emailRules: [
-        v => !!v || "Email is required",
+        v => !!v || "邮箱不能为空",
         v =>
           (v &&
             /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/.test(
@@ -213,8 +213,8 @@ export default {
           "请输入正确的邮箱"
       ],
       passwordRules: [
-        v => !!v || "password is required",
-        v => (v && v.length >= 6) || "Password must be more than 6 characters"
+        v => !!v || "密码不能为空",
+        v => (v && v.length >= 6) || "密码必须超过六个字符"
       ]
     };
   },
