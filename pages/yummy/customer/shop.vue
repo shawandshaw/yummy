@@ -18,7 +18,7 @@
                               <v-avatar size="100">
                             <img src="/shopLogo.png">
                         </v-avatar>
-                        <span class="title">{{shop.name}}</span>
+                        <span class="title">{{shop.name}} <v-icon color="white">place</v-icon> {{shop.address.name}}  </span>
                         </div>
                         <span class="title">{{shop.description}}</span>
                         
