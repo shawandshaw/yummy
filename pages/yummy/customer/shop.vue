@@ -8,7 +8,24 @@
                 </v-btn>
             </v-badge>
         </Header>
+
         <v-content>
+            <v-img src="/dishes.jpg" style="filter: blur(5px)" height="150"></v-img>
+            <v-layout justify-center>
+                <v-container style="position:absolute;top:0;">
+                    <v-layout class="lightbox white--text" align-center justify-space-between>
+                        <div>
+                              <v-avatar size="100">
+                            <img src="/shopLogo.png">
+                        </v-avatar>
+                        <span class="title">{{shop.name}}</span>
+                        </div>
+                        <span class="title">{{shop.description}}</span>
+                        
+                    </v-layout>
+                </v-container>
+            </v-layout>
+
             <v-container grid-list-lg>
                 <v-layout row wrap fill-height>
                     <v-flex v-for="(good,index) in combos" v-bind:key="index+'combo'" lg3 md4 xs12>
@@ -53,7 +70,7 @@
                                 <v-btn icon small @click="item.number++;refreshCart();">
                                     <v-icon>add</v-icon>
                                 </v-btn>
-                                <v-btn icon disabled  small>{{ item.number }}</v-btn>
+                                <v-btn icon disabled small>{{ item.number }}</v-btn>
                                 <v-btn icon small @click="decrease(item,index);">
                                     <v-icon>remove</v-icon>
                                 </v-btn>
@@ -94,7 +111,7 @@
                                 <v-list-tile-sub-title>{{ item.combo.description }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                             <v-list-tile-action>
-                                <span >{{ item.number }}</span>
+                                <span>{{ item.number }}</span>
                             </v-list-tile-action>
                         </v-list-tile>
                         <v-divider v-if="index + 1 < cartItems.length" :key="`divider-${index}`"></v-divider>
@@ -120,7 +137,11 @@
                 <v-divider></v-divider>
                 <v-card-actions>
                     <v-chip flat>折前价 {{theOrder.originPrice}}元</v-chip>
-                    <v-chip flat @click="promotionDialog=true" v-if="theOrder.promotion.benefit<1">优惠 {{theOrder.promotion.benefit}}</v-chip>
+                    <v-chip
+                        flat
+                        @click="promotionDialog=true"
+                        v-if="theOrder.promotion.benefit<1"
+                    >优惠 {{theOrder.promotion.benefit}}</v-chip>
                     <v-chip flat>折后价 {{theOrder.realPrice}}元</v-chip>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -232,7 +253,6 @@ import Card from "@/components/GoodCard";
 import Header from "@/components/HeaderC";
 import axios from "@/plugins/axios";
 import { distanceFunc } from "@/utils/util";
-import beaf from "@/assets/beaf.jpg";
 
 export default {
     components: {
@@ -253,7 +273,6 @@ export default {
                 message: "",
                 order: {}
             },
-            beaf: beaf,
             show_QRcode: false,
             cartDialog: false,
             orderDialog: false,
@@ -404,30 +423,29 @@ export default {
                     }
                 });
         },
-        fetchGoods(){
-          let vue = this;
-          this.goods=[];
-          this.combos=[];
-          vue.shop.id = window.location.search.split("shopId=")[1];
-           axios
-            .get("/api/goods", {
-                params: {
-                    shopId: vue.shop.id
-                }
-            })
-            .then(res => {
-                vue.goods = res.data;
-            });
-        axios
-            .get("/api/combos", {
-                params: {
-                    shopId: vue.shop.id
-                }
-            })
-            .then(res => {
-                vue.combos = res.data;
-            });
-
+        fetchGoods() {
+            let vue = this;
+            this.goods = [];
+            this.combos = [];
+            vue.shop.id = window.location.search.split("shopId=")[1];
+            axios
+                .get("/api/goods", {
+                    params: {
+                        shopId: vue.shop.id
+                    }
+                })
+                .then(res => {
+                    vue.goods = res.data;
+                });
+            axios
+                .get("/api/combos", {
+                    params: {
+                        shopId: vue.shop.id
+                    }
+                })
+                .then(res => {
+                    vue.combos = res.data;
+                });
         }
     },
     mounted() {
@@ -464,8 +482,8 @@ export default {
                     address: {}
                 };
             });
-            this.fetchGoods();
-               // axios
+        this.fetchGoods();
+        // axios
         //   .get("/api/promotions", {
         //     params: {
         //       shopId: vue.shopId
