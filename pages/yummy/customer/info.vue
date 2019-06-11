@@ -6,10 +6,12 @@
         <v-tabs color="primary" dark icons-and-text v-model="activeTabs">
           <v-tabs-slider color="secondary"></v-tabs-slider>
 
-          <v-tab href="#tab-address">收货地址
+          <v-tab href="#tab-address">
+            收货地址
             <v-icon>place</v-icon>
           </v-tab>
-          <v-tab href="#tab-info">个人信息
+          <v-tab href="#tab-info">
+            个人信息
             <v-icon>person</v-icon>
           </v-tab>
 
@@ -74,37 +76,94 @@
           <v-tab-item value="tab-info">
             <v-card>
               <v-container>
-                <v-layout column wrap>
-                  <v-flex>
-                    <v-text-field :value="userInfo.email" label="Email" readonly></v-text-field>
+                <v-layout fill-height align-center justify-center>
+                  <v-flex xs6 sm4 md3>
+                    <v-avatar size="300px">
+                      <img src="../../../assets/avatar.png" alt="Avatar">
+                    </v-avatar>
                   </v-flex>
-                  <v-flex>
-                    <v-text-field :value="userInfo.spend" label="Spend" readonly></v-text-field>
-                  </v-flex>
-                  <v-flex>
-                    <v-text-field :value="userInfo.balance" label="Balance" readonly></v-text-field>
-                  </v-flex>
-                  <v-flex>
-                    <v-text-field :value="userInfo.level" label="会员等级" readonly></v-text-field>
-                  </v-flex>
-                  <v-flex>
-                    <v-text-field
-                      :value="userInfo.username"
-                      label="Username"
-                      readonly
-                      append-icon="create"
-                      @click:append="infoDialog=true"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex>
-                    <v-text-field
-                      value="***********"
-                      label="Password"
-                      readonly
-                      append-icon="create"
-                      @click:append="infoDialog=true"
-                    ></v-text-field>
-                  </v-flex>
+                  <v-layout column wrap justify-start>
+                    <v-flex>
+                      <label style="font-size:40px">
+                        {{userInfo.username}}
+                        <v-btn icon @click="infoDialog=true" large style="width:60px">
+                          <v-icon>create</v-icon>修改
+                        </v-btn>
+                      </label>
+                    </v-flex>
+                    <v-divider></v-divider>
+                    <br>
+                    <v-layout row style="font-size:40px">
+                      <v-layout column fill-height align-center>
+                        <v-flex>
+                          <label>{{userInfo.spend}}</label>
+                        </v-flex>
+                        <v-flex>
+                          <v-subheader>总开销</v-subheader>
+                        </v-flex>
+                      </v-layout>
+                      <v-layout column fill-height align-center>
+                        <v-flex>
+                          <label>{{userInfo.balance}}</label>
+                        </v-flex>
+                        <v-flex>
+                          <v-subheader>余额</v-subheader>
+                        </v-flex>
+                      </v-layout>
+                      <v-layout column fill-height align-center>
+                        <v-flex>
+                          <label>{{userInfo.level}}</label>
+                        </v-flex>
+                        <v-flex>
+                          <v-subheader>会员等级</v-subheader>
+                        </v-flex>
+                      </v-layout>
+                      <v-spacer></v-spacer>
+                      <v-spacer></v-spacer>
+                      <v-spacer></v-spacer>
+                    </v-layout>
+                    <br>
+                    <v-flex>
+                      <label style="font-size:20px">电子邮件：{{userInfo.email}}</label>
+                    </v-flex>
+                    <br>
+                    <v-flex>
+                      <label style="font-size:20px">密码：**********</label>
+                      <v-btn icon @click="infoDialog=true" large style="width:60px">
+                        <v-icon>create</v-icon>修改
+                      </v-btn>
+                    </v-flex>
+                    <!-- <v-flex>
+                      <v-text-field :value="userInfo.email" label="Email" readonly></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                      <v-text-field :value="userInfo.spend" label="Spend" readonly></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                      <v-text-field :value="userInfo.balance" label="Balance" readonly></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                      <v-text-field :value="userInfo.level" label="会员等级" readonly></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                      <v-text-field
+                        :value="userInfo.username"
+                        label="Username"
+                        readonly
+                        append-icon="create"
+                        @click:append="infoDialog=true"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex>
+                      <v-text-field
+                        value="***********"
+                        label="Password"
+                        readonly
+                        append-icon="create"
+                        @click:append="infoDialog=true"
+                      ></v-text-field>
+                    </v-flex>-->
+                  </v-layout>
                 </v-layout>
               </v-container>
             </v-card>
@@ -114,7 +173,7 @@
         <v-dialog v-model="infoDialog" width="500">
           <v-card class="elevation-12">
             <v-toolbar dark color="primary">
-              <v-toolbar-title>Info</v-toolbar-title>
+              <v-toolbar-title>更改信息</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon large>
                 <v-icon large>code</v-icon>
@@ -128,7 +187,7 @@
                   :rules="rules.nameRules"
                   required
                   name="username"
-                  label="Username"
+                  label="用户名"
                   type="text"
                 ></v-text-field>
                 <v-text-field
@@ -136,7 +195,7 @@
                   :rules="rules.passwordRules"
                   prepend-icon="lock"
                   name="password"
-                  label="Password"
+                  label="密码"
                   id="password"
                   type="password"
                 ></v-text-field>
@@ -146,7 +205,7 @@
                   v-model="infoEditModel.passwordAgain"
                   :rules="rules.passwordAgainRules"
                   name="passwordAgain"
-                  label="Password Again"
+                  label="确认密码"
                   id="passwordAgain"
                   type="password"
                 ></v-text-field>
@@ -157,10 +216,10 @@
                 @click="infoDialog=false;infoEditModel = JSON.parse(JSON.stringify(userInfo));"
                 flat
               >
-                <v-icon>arrow_back</v-icon>cancel
+                <v-icon>arrow_back</v-icon>取消
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="primary" @click="submit" class="white--text">Change</v-btn>
+              <v-btn color="primary" @click="submit" class="white--text">确定更改</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -262,7 +321,7 @@ export default {
         email: "hhh@qq.com",
         spend: 0,
         balance: 0,
-        username: "",
+        username: "pikaqiu",
         level: 0,
         password: "******",
         passwordAgain: "******"
