@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-      address: {name:'北京',lng: 116.23,lat:39.54},
+      address: {"name":"南京大学(鼓楼校区)","lng":118.78600,"lat":32.06143},
       showSearch: false,
       menu: [
         {
