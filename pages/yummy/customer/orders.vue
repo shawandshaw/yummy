@@ -1,80 +1,153 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-app>
     <Header></Header>
     <v-content>
       <v-container fluid>
-        <v-card>
-          <v-toolbar dark color="cyan darken-2">
-            <v-toolbar-title>订单(共{{orders.length}}份)</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-text-field
-              v-model="search"
-              append-icon="search"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
-          </v-toolbar>
-          <v-data-table ref="table" :headers="headers" :items="orders" :search="search">
-            <template slot="items" slot-scope="props">
-              <td>{{ props.item.id }}</td>
-              <td>{{ props.item.shop.name }}</td>
-              <td class="text-xs-left">{{ props.item.createTime }}</td>
-              <td class="text-xs-left">{{ props.item.payTime }}</td>
-              <td class="text-xs-left">{{ props.item.originPrice }}</td>
-              <td class="text-xs-left">{{ props.item.realPrice }}</td>
-              <td class="text-xs-left">
-                <v-chip
-                  :color="colorStatus(props.item.status)"
-                  text-color="white"
-                  small
-                >{{ props.item.status }}</v-chip>
-              </td>
-              <td class="text-xs-left">
-                <v-btn small fab @click="chosenOrder=props.item;detailDialog=true;">详情</v-btn>
-                <v-btn
-                  v-if="props.item.status!='got'&&props.item.status!='canceled'&&props.item.status!='timeout'"
-                  small
-                  fab
-                  @click="chosenOrder=props.item;cancel(chosenOrder)"
-                >取消</v-btn>
-                <v-btn
-                  v-if="props.item.status=='notPaid'"
-                  small
-                  fab
-                  @click="chosenOrder=props.item;showQRcode(props.item);"
-                >支付</v-btn>
-                <v-btn
-                  v-if="props.item.status=='sending'"
-                  small
-                  fab
-                  @click="chosenOrder=props.item;receive(chosenOrder);"
-                >确认收货</v-btn>
-              </td>
-            </template>
-            <template slot="footer">
-              <td>筛选统计(SUM)</td>
-              <td>共{{filteredOrders.length}}份订单</td>
-              <td class="text-xs-left"></td>
-              <td class="text-xs-left"></td>
-              <td class="text-xs-left">{{sumOriginPrice}}</td>
-              <td class="text-xs-left">{{sumRealPrice}}</td>
-              <td class="text-xs-left"></td>
-              <td class="text-xs-left">共{{sumGoods}}个商品</td>
-            </template>
-            <v-alert :value="true" color="error" icon="warning">Sorry, nothing to display here.</v-alert>
-            <v-alert
-              slot="no-results"
-              :value="true"
-              color="error"
-              icon="warning"
-            >Your search for "{{ search }}" found no results.</v-alert>
-          </v-data-table>
-        </v-card>
-        <v-dialog v-model="detailDialog" width="500">
+        <v-layout justify-center>
+          <v-card style="width: 80%; justify-content: center">
+            <v-toolbar dark color="primary">
+              <v-toolbar-title>订单(共{{orders.length}}份)</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-text-field
+                v-model="search"
+                append-icon="search"
+                label="搜索"
+                color="white"
+                single-line
+                hide-details
+              ></v-text-field>
+            </v-toolbar>
+            <br>
+            <v-layout align-left style="background-color: #f0f0f0; width: auto">
+              <v-card-text style="color: #494949; width: auto" class="font-weight-bold">订单分类:</v-card-text>
+              <template>
+                <v-btn flat  @click="searchState('all', '0')" style="width: auto;" :color = sortColor[0]>全部</v-btn>
+                <v-btn flat  @click="searchState('paid', '1')"  style="width: auto" :color = sortColor[1]>等待送达</v-btn>
+                <v-btn flat @click="searchState('notPaid', '2')"  style="width: auto" :color = sortColor[2]>等待支付</v-btn>
+                <v-btn flat @click="searchState('canceled', '3')"  style="width: auto" :color = sortColor[3]>订单取消</v-btn>
+                <v-btn flat @click="searchState('timeout', '4')"  style="width: auto" :color = sortColor[4]>订单超时</v-btn>
+                <v-btn flat @click="searchState('got', '5')"  style="width: auto" :color = sortColor[5]>订单完成</v-btn>
+              </template>
+
+            </v-layout>
+
+
+
+
+            <v-data-table ref="table" :headers="headers" :items="filteredOrders" :search="search">
+              <template slot="items" slot-scope="props">
+                <td>{{ props.item.id }}</td>
+                <td>{{ props.item.shop.name }}</td>
+                <td class="text-xs-left">{{ props.item.createTime }}</td>
+                <td class="text-xs-left">{{ props.item.payTime }}</td>
+                <td class="text-xs-left">{{ props.item.originPrice }}元</td>
+                <td class="text-xs-left">{{ props.item.realPrice }}元</td>
+                <td class="text-xs-left"><v-chip color="white" :text-color="colorStatus(props.item.status)">{{Status(props.item.status)}}</v-chip></td>
+                <td class="text-xs-left">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn icon v-on="on">
+                        <v-btn small icon style="color: black ;"  v-on="on" @click="chosenOrder=props.item;detailDialog=true;" ><v-icon>info</v-icon></v-btn>
+                      </v-btn>
+
+                    </template>
+                    <span>详情</span>
+                  </v-tooltip>
+
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn icon v-on="on">
+                        <v-btn
+                          v-if="props.item.status!=='got'&&props.item.status!=='canceled'&&props.item.status!=='timeout'"
+                          small
+                          icon
+                          v-on="on"
+                          @click="chosenOrder=props.item;cancel(chosenOrder)"
+                        ><v-icon>delete</v-icon></v-btn>
+                        <v-btn
+                          v-else
+                          small
+                          icon
+                          disabled
+                          v-on="on"
+                          @click="chosenOrder=props.item;cancel(chosenOrder)"
+                        ><v-icon>delete</v-icon></v-btn>
+                      </v-btn>
+                    </template>
+                    <span>取消</span>
+                  </v-tooltip>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn icon v-on="on">
+                        <v-btn
+                          v-if="props.item.status==='notPaid'"
+                          small
+                          icon
+                          v-on="on"
+                          @click="chosenOrder=props.item;showQRcode(props.item);"
+                        ><v-icon>payment</v-icon></v-btn>
+                        <v-btn
+                          v-else
+                          small
+                          icon
+                          disabled
+                          v-on="on"
+                          @click="chosenOrder=props.item;showQRcode(props.item);"
+                        ><v-icon>payment</v-icon></v-btn>
+                      </v-btn>
+                    </template>
+                    <span>支付</span>
+                  </v-tooltip>
+
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn icon v-on="on">
+                        <v-btn
+                          v-if="props.item.status==='sending'"
+                          small
+                          icon
+                          v-on="on"
+                          @click="chosenOrder=props.item;receive(chosenOrder);"
+                        ><v-icon>shopping_basket</v-icon></v-btn>
+                        <v-btn
+                          v-else
+                          small
+                          icon
+                          disabled
+                          v-on="on"
+                          @click="chosenOrder=props.item;receive(chosenOrder);"
+                        ><v-icon>shopping_basket</v-icon></v-btn>
+                      </v-btn>
+                    </template>
+                    <span>确认收货</span>
+                  </v-tooltip>
+
+                </td>
+              </template>
+              <template slot="footer">
+                <td>总计</td>
+                <td>共{{filteredOrders.length}}份订单</td>
+                <td class="text-xs-left"></td>
+                <td class="text-xs-left"></td>
+                <td class="text-xs-left">{{sumOriginPrice}}元</td>
+                <td class="text-xs-left">{{sumRealPrice}}元</td>
+                <td class="text-xs-left"></td>
+<!--                <td class="text-xs-left">共{{sumGoods}}个商品</td>-->
+              </template>
+              <v-alert :value="true" color="error" icon="warning">Sorry, nothing to display here.</v-alert>
+              <v-alert
+                slot="no-results"
+                :value="true"
+                color="error"
+                icon="warning"
+              >Your search for "{{ search }}" found no results.</v-alert>
+            </v-data-table>
+          </v-card>
+        </v-layout>
+        <v-dialog v-model="detailDialog" width="700">
           <v-card>
-            <v-toolbar color="pink" dark>
-              <v-toolbar-title>Order Details</v-toolbar-title>
+            <v-toolbar color="blue" dark>
+              <v-toolbar-title>订单详情</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon>
                 <v-icon>list_alt</v-icon>
@@ -82,14 +155,21 @@
             </v-toolbar>
             <v-list two-line>
               <template v-for="(item, index) in chosenOrder.items">
-                <v-list-tile :key="index" avatar @click=";">
+                <v-list-tile :key="index" avatar @click="">
                   <v-list-tile-content>
                     <v-list-tile-title>{{ item.combo.name }}</v-list-tile-title>
-                    <v-list-tile-sub-title class="text--primary">{{ item.combo.price }}</v-list-tile-sub-title>
-                    <v-list-tile-sub-title>{{ item.combo.description }}</v-list-tile-sub-title>
+<!--                    <v-list-tile-sub-title>{{ item.combo.description }}</v-list-tile-sub-title>-->
+<!--                    <v-list-tile-sub-title class="text&#45;&#45;primary">{{ "售价：" + item.combo.price + "元" }}</v-list-tile-sub-title>-->
+
                   </v-list-tile-content>
                   <v-list-tile-action>
-                    <v-btn icon disabled small>{{ item.number }}</v-btn>
+                    <v-btn icon disabled small>{{ item.combo.description }}</v-btn>
+                  </v-list-tile-action>
+                  <v-list-tile-action>
+                    <v-btn icon disabled small>{{ item.number + "份" }}</v-btn>
+                  </v-list-tile-action>
+                  <v-list-tile-action>
+                    <v-btn icon disabled small>{{item.combo.price + "元/份" }}</v-btn>
                   </v-list-tile-action>
                 </v-list-tile>
                 <v-divider v-if="index + 1 < chosenOrder.items.length" :key="`divider-${index}`"></v-divider>
@@ -102,24 +182,30 @@
               <div>电话：{{chosenOrder.receiveInfo.phone}}</div>
             </v-container>
             <v-divider></v-divider>
-            <v-card-actions>
-              <v-chip flat>原价 {{chosenOrder.originPrice}}</v-chip>
-              <v-chip flat @click="promotionDialog=true"><v-icon small>info</v-icon> 优惠{{chosenOrder.promotion.benefit}}</v-chip>
-              <v-chip flat>现价 {{chosenOrder.realPrice}}</v-chip>
-              <v-spacer></v-spacer>
+            <v-layout justify-end>
+              <v-card-actions>
+                <v-chip flat>总价 {{chosenOrder.originPrice}}元</v-chip>
+                <v-chip flat @click="promotionDialog=true"><v-icon small>info</v-icon> 优惠{{chosenOrder.promotion.benefit}}</v-chip>
+                <v-chip flat>付款 {{chosenOrder.realPrice}}元</v-chip>
+                <v-spacer></v-spacer>
+
+              </v-card-actions>
+
+            </v-layout>
+            <v-layout justify-end>
               <v-btn
                 v-if="chosenOrder.status=='notPaid'"
-                color="primary"
                 flat
+                style="background-color: white;"
                 @click="detailDialog = false;showQRcode(chosenOrder)"
-              >Pay</v-btn>
-            </v-card-actions>
+              >支付</v-btn>
+            </v-layout>
           </v-card>
         </v-dialog>
         <v-dialog v-model="promotionDialog" width="500">
           <v-card>
-            <v-toolbar color="pink" dark>
-              <v-toolbar-title>promotion</v-toolbar-title>
+            <v-toolbar color="primary" dark>
+              <v-toolbar-title>优惠</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
             <v-card-text>
@@ -128,7 +214,7 @@
                   prepend-icon="star"
                   v-model="chosenOrder.promotion.id"
                   required
-                  placeholder="后端自动生成"
+                  placeholder="自动生成"
                   readonly
                   name="name"
                   label="优惠ID"
@@ -176,17 +262,17 @@
         </v-dialog>
         <v-dialog v-model="QRcode" width="500">
           <v-card>
-            <v-toolbar color="pink" dark>
-              <v-toolbar-title>OrderId: {{this.chosenOrder.id}}</v-toolbar-title>
+            <v-toolbar color="primary" dark>
+              <v-toolbar-title>订单号: {{this.chosenOrder.id}}</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
-            <v-card-text>RMB: {{this.chosenOrder.realPrice}}</v-card-text>
+            <v-card-text>实付: {{this.chosenOrder.realPrice}} 元</v-card-text>
             <v-divider></v-divider>
 
             <v-card-actions>
-              <v-btn color="primary" flat @click="QRcode=false">later</v-btn>
+              <v-btn color="primary" flat @click="QRcode=false">稍后再付</v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="primary" flat @click="pay()">paydone</v-btn>
+              <v-btn color="primary" flat @click="pay()">付款</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -214,20 +300,602 @@ export default {
       detailDialog: false,
       QRcode: false,
       headers: [
-        { text: "OrderId", value: "id" },
-        { text: "Shop", value: "shop.name" },
-        { text: "CreateTime", value: "createTime" },
-        { text: "PayTime", value: "payTime" },
-        { text: "OriginPrice", value: "originPrice" },
-        { text: "RealPrice", value: "realPrice" },
-        { text: "Status", value: "status" },
-        { text: "Actions", value: "action", sortable: false, align: "left" }
+        { text: "订单号", value: "id" },
+        { text: "店铺", value: "shop.name" },
+        { text: "订单时间", value: "createTime" },
+        { text: "付款时间", value: "payTime" },
+        { text: "原价", value: "originPrice" },
+        { text: "实际支付", value: "realPrice" },
+        { text: "状态", value: "status" },
+        { text: "操作", value: "action", sortable: false, align: "center" }
       ],
-      orders: [],
-      filteredOrders: []
+      orders:[{
+        createTime:"2019-03-06 15:34:35",
+          id:1,
+          items:[
+            {
+            combo:
+              {description:"汤面",
+                endDate:"2019-03-28",
+                id:3,
+                items:[
+                  {
+                  good:{
+                    description:"汤面",
+                      endDate:"2019-07-31",
+                    id:1,
+                    name:"牛肉拉面",
+                    price:15.0,
+                    quantity:110,
+                    shopId:1000001,
+                    startDate:"2019-03-05"
+                  },
+                  id:1,
+                  number:1
+                  }
+                  ],
+                name:"牛肉拉面",
+                oldPrice:15.0,
+                price:15.0,
+                shopId:1000001,
+                startDate:"2019-03-05",
+                status:"single"
+              },
+              dealPrice:15.0,
+              id:1,
+              number:5
+            },
+          ],
+        originPrice:135.0,
+        payTime:"",
+        promotion: {
+          benefit:0.95,
+          endDate:"2019-03-06",
+          id:3,
+          minLevel:1,
+          minPrice:100.0,
+          shopId:1000001,
+          startDate:"2019-03-06"
+        },
+        realPrice:128.25,
+        receiveInfo:{
+          address:{
+            id:25,
+            lat:32.118266,
+            lng:118.961233,
+            name:"南京市栖霞区南京大学仙林校区学生公寓-01幢"
+          },
+          detailedAddress:"624",
+          gender:"先生",
+          id:2,
+          phone:"18275068331",
+          receiver:"邵靖靖"
+        },
+        shop:{
+          address:{
+            id:103,
+            lat:32.060164,
+            lng:118.788834,
+            name:"南京市鼓楼区汉口路-道路"
+          },
+          balance:383.02,
+          description:"拉面，炒饭，盖饭，烧烤",
+          detailedAddress:"507",
+          earn:383.02,
+          email:"shawjingzzz@163.com",
+          id:1000001,
+          name:"兰州拉面",
+          password:"a2fee4669fc5a784f8f2cb914fe61b1d",
+          salt:"8489",
+          status:"confirmed",
+          type:"主食"
+        },
+        status:"got"
+      },{
+        createTime:"2019-03-06 15:34:35",
+        id:2,
+        items:[
+          {
+            combo:
+              {description:"汤面",
+                endDate:"2019-03-28",
+                id:3,
+                items:[
+                  {
+                    good:{
+                      description:"汤面",
+                      endDate:"2019-07-31",
+                      id:1,
+                      name:"牛肉拉面",
+                      price:15.0,
+                      quantity:110,
+                      shopId:1000001,
+                      startDate:"2019-03-05"
+                    },
+                    id:1,
+                    number:1
+                  }
+                ],
+                name:"牛肉拉面",
+                oldPrice:15.0,
+                price:15.0,
+                shopId:1000001,
+                startDate:"2019-03-05",
+                status:"single"
+              },
+            dealPrice:15.0,
+            id:1,
+            number:5
+          },
+        ],
+        originPrice:135.0,
+        payTime:"",
+        promotion: {
+          benefit:0.95,
+          endDate:"2019-03-06",
+          id:3,
+          minLevel:1,
+          minPrice:100.0,
+          shopId:1000001,
+          startDate:"2019-03-06"
+        },
+        realPrice:128.25,
+        receiveInfo:{
+          address:{
+            id:25,
+            lat:32.118266,
+            lng:118.961233,
+            name:"南京市栖霞区南京大学仙林校区学生公寓-01幢"
+          },
+          detailedAddress:"624",
+          gender:"先生",
+          id:2,
+          phone:"18275068331",
+          receiver:"邵靖靖"
+        },
+        shop:{
+          address:{
+            id:103,
+            lat:32.060164,
+            lng:118.788834,
+            name:"南京市鼓楼区汉口路-道路"
+          },
+          balance:383.02,
+          description:"拉面，炒饭，盖饭，烧烤",
+          detailedAddress:"507",
+          earn:383.02,
+          email:"shawjingzzz@163.com",
+          id:1000001,
+          name:"兰州拉面",
+          password:"a2fee4669fc5a784f8f2cb914fe61b1d",
+          salt:"8489",
+          status:"confirmed",
+          type:"主食"
+        },
+        status:"paid"
+      },{
+        createTime:"2019-03-06 15:34:35",
+        id:3,
+        items:[
+          {
+            combo:
+              {description:"汤面",
+                endDate:"2019-03-28",
+                id:3,
+                items:[
+                  {
+                    good:{
+                      description:"汤面",
+                      endDate:"2019-07-31",
+                      id:1,
+                      name:"牛肉拉面",
+                      price:15.0,
+                      quantity:110,
+                      shopId:1000001,
+                      startDate:"2019-03-05"
+                    },
+                    id:1,
+                    number:1
+                  }
+                ],
+                name:"牛肉拉面",
+                oldPrice:15.0,
+                price:15.0,
+                shopId:1000001,
+                startDate:"2019-03-05",
+                status:"single"
+              },
+            dealPrice:15.0,
+            id:1,
+            number:5
+          },
+        ],
+        originPrice:135.0,
+        payTime:"",
+        promotion: {
+          benefit:0.95,
+          endDate:"2019-03-06",
+          id:3,
+          minLevel:1,
+          minPrice:100.0,
+          shopId:1000001,
+          startDate:"2019-03-06"
+        },
+        realPrice:128.25,
+        receiveInfo:{
+          address:{
+            id:25,
+            lat:32.118266,
+            lng:118.961233,
+            name:"南京市栖霞区南京大学仙林校区学生公寓-01幢"
+          },
+          detailedAddress:"624",
+          gender:"先生",
+          id:2,
+          phone:"18275068331",
+          receiver:"邵靖靖"
+        },
+        shop:{
+          address:{
+            id:103,
+            lat:32.060164,
+            lng:118.788834,
+            name:"南京市鼓楼区汉口路-道路"
+          },
+          balance:383.02,
+          description:"拉面，炒饭，盖饭，烧烤",
+          detailedAddress:"507",
+          earn:383.02,
+          email:"shawjingzzz@163.com",
+          id:1000001,
+          name:"兰州拉面",
+          password:"a2fee4669fc5a784f8f2cb914fe61b1d",
+          salt:"8489",
+          status:"confirmed",
+          type:"主食"
+        },
+        status:"notPaid"
+      },{
+        createTime:"2019-03-06 15:34:35",
+        id:4,
+        items:[
+          {
+            combo:
+              {description:"汤面",
+                endDate:"2019-03-28",
+                id:3,
+                items:[
+                  {
+                    good:{
+                      description:"汤面",
+                      endDate:"2019-07-31",
+                      id:1,
+                      name:"牛肉拉面",
+                      price:15.0,
+                      quantity:110,
+                      shopId:1000001,
+                      startDate:"2019-03-05"
+                    },
+                    id:1,
+                    number:1
+                  }
+                ],
+                name:"牛肉拉面",
+                oldPrice:15.0,
+                price:15.0,
+                shopId:1000001,
+                startDate:"2019-03-05",
+                status:"single"
+              },
+            dealPrice:15.0,
+            id:1,
+            number:5
+          },
+        ],
+        originPrice:135.0,
+        payTime:"",
+        promotion: {
+          benefit:0.95,
+          endDate:"2019-03-06",
+          id:3,
+          minLevel:1,
+          minPrice:100.0,
+          shopId:1000001,
+          startDate:"2019-03-06"
+        },
+        realPrice:128.25,
+        receiveInfo:{
+          address:{
+            id:25,
+            lat:32.118266,
+            lng:118.961233,
+            name:"南京市栖霞区南京大学仙林校区学生公寓-01幢"
+          },
+          detailedAddress:"624",
+          gender:"先生",
+          id:2,
+          phone:"18275068331",
+          receiver:"邵靖靖"
+        },
+        shop:{
+          address:{
+            id:103,
+            lat:32.060164,
+            lng:118.788834,
+            name:"南京市鼓楼区汉口路-道路"
+          },
+          balance:383.02,
+          description:"拉面，炒饭，盖饭，烧烤",
+          detailedAddress:"507",
+          earn:383.02,
+          email:"shawjingzzz@163.com",
+          id:1000001,
+          name:"兰州拉面",
+          password:"a2fee4669fc5a784f8f2cb914fe61b1d",
+          salt:"8489",
+          status:"confirmed",
+          type:"主食"
+        },
+        status:"canceled"
+      },{
+        createTime:"2019-03-06 15:34:35",
+        id:5,
+        items:[
+          {
+            combo:
+              {description:"汤面",
+                endDate:"2019-03-28",
+                id:3,
+                items:[
+                  {
+                    good:{
+                      description:"汤面",
+                      endDate:"2019-07-31",
+                      id:1,
+                      name:"牛肉拉面",
+                      price:15.0,
+                      quantity:110,
+                      shopId:1000001,
+                      startDate:"2019-03-05"
+                    },
+                    id:1,
+                    number:1
+                  }
+                ],
+                name:"牛肉拉面",
+                oldPrice:15.0,
+                price:15.0,
+                shopId:1000001,
+                startDate:"2019-03-05",
+                status:"single"
+              },
+            dealPrice:15.0,
+            id:1,
+            number:5
+          },
+        ],
+        originPrice:135.0,
+        payTime:"",
+        promotion: {
+          benefit:0.95,
+          endDate:"2019-03-06",
+          id:3,
+          minLevel:1,
+          minPrice:100.0,
+          shopId:1000001,
+          startDate:"2019-03-06"
+        },
+        realPrice:128.25,
+        receiveInfo:{
+          address:{
+            id:25,
+            lat:32.118266,
+            lng:118.961233,
+            name:"南京市栖霞区南京大学仙林校区学生公寓-01幢"
+          },
+          detailedAddress:"624",
+          gender:"先生",
+          id:2,
+          phone:"18275068331",
+          receiver:"邵靖靖"
+        },
+        shop:{
+          address:{
+            id:103,
+            lat:32.060164,
+            lng:118.788834,
+            name:"南京市鼓楼区汉口路-道路"
+          },
+          balance:383.02,
+          description:"拉面，炒饭，盖饭，烧烤",
+          detailedAddress:"507",
+          earn:383.02,
+          email:"shawjingzzz@163.com",
+          id:1000001,
+          name:"兰州拉面",
+          password:"a2fee4669fc5a784f8f2cb914fe61b1d",
+          salt:"8489",
+          status:"confirmed",
+          type:"主食"
+        },
+        status:"timeout"
+      },{
+          createTime:"2019-03-06 15:34:35",
+          id:6,
+          items:[
+            {
+              combo:
+                {description:"汤面",
+                  endDate:"2019-03-28",
+                  id:3,
+                  items:[
+                    {
+                      good:{
+                        description:"汤面",
+                        endDate:"2019-07-31",
+                        id:1,
+                        name:"牛肉拉面",
+                        price:15.0,
+                        quantity:110,
+                        shopId:1000001,
+                        startDate:"2019-03-05"
+                      },
+                      id:1,
+                      number:1
+                    }
+                  ],
+                  name:"牛肉拉面",
+                  oldPrice:15.0,
+                  price:15.0,
+                  shopId:1000001,
+                  startDate:"2019-03-05",
+                  status:"single"
+                },
+              dealPrice:15.0,
+              id:1,
+              number:5
+            },
+          ],
+          originPrice:135.0,
+          payTime:"",
+          promotion: {
+            benefit:0.95,
+            endDate:"2019-03-06",
+            id:3,
+            minLevel:1,
+            minPrice:100.0,
+            shopId:1000001,
+            startDate:"2019-03-06"
+          },
+          realPrice:128.25,
+          receiveInfo:{
+            address:{
+              id:25,
+              lat:32.118266,
+              lng:118.961233,
+              name:"南京市栖霞区南京大学仙林校区学生公寓-01幢"
+            },
+            detailedAddress:"624",
+            gender:"先生",
+            id:2,
+            phone:"18275068331",
+            receiver:"邵靖靖"
+          },
+          shop:{
+            address:{
+              id:103,
+              lat:32.060164,
+              lng:118.788834,
+              name:"南京市鼓楼区汉口路-道路"
+            },
+            balance:383.02,
+            description:"拉面，炒饭，盖饭，烧烤",
+            detailedAddress:"507",
+            earn:383.02,
+            email:"shawjingzzz@163.com",
+            id:1000001,
+            name:"兰州拉面",
+            password:"a2fee4669fc5a784f8f2cb914fe61b1d",
+            salt:"8489",
+            status:"confirmed",
+            type:"主食"
+          },
+          status:"canceled"
+        },
+        {
+          createTime:"2019-03-06 15:34:35",
+          id:7,
+          items:[
+            {
+              combo:
+                {description:"汤面",
+                  endDate:"2019-03-28",
+                  id:3,
+                  items:[
+                    {
+                      good:{
+                        description:"汤面",
+                        endDate:"2019-07-31",
+                        id:1,
+                        name:"牛肉拉面",
+                        price:15.0,
+                        quantity:110,
+                        shopId:1000001,
+                        startDate:"2019-03-05"
+                      },
+                      id:1,
+                      number:1
+                    }
+                  ],
+                  name:"牛肉拉面",
+                  oldPrice:15.0,
+                  price:15.0,
+                  shopId:1000001,
+                  startDate:"2019-03-05",
+                  status:"single"
+                },
+              dealPrice:15.0,
+              id:1,
+              number:5
+            },
+          ],
+          originPrice:135.0,
+          payTime:"",
+          promotion: {
+            benefit:0.95,
+            endDate:"2019-03-06",
+            id:3,
+            minLevel:1,
+            minPrice:100.0,
+            shopId:1000001,
+            startDate:"2019-03-06"
+          },
+          realPrice:128.25,
+          receiveInfo:{
+            address:{
+              id:25,
+              lat:32.118266,
+              lng:118.961233,
+              name:"南京市栖霞区南京大学仙林校区学生公寓-01幢"
+            },
+            detailedAddress:"624",
+            gender:"先生",
+            id:2,
+            phone:"18275068331",
+            receiver:"邵靖靖"
+          },
+          shop:{
+            address:{
+              id:103,
+              lat:32.060164,
+              lng:118.788834,
+              name:"南京市鼓楼区汉口路-道路"
+            },
+            balance:383.02,
+            description:"拉面，炒饭，盖饭，烧烤",
+            detailedAddress:"507",
+            earn:383.02,
+            email:"shawjingzzz@163.com",
+            id:1000001,
+            name:"兰州拉面",
+            password:"a2fee4669fc5a784f8f2cb914fe61b1d",
+            salt:"8489",
+            status:"confirmed",
+            type:"主食"
+          },
+          status:"sending"
+        }
+        ],
+      filteredOrders: [],
+
+      originOrders: [],
+
+      sortColor:["red","black","black","black","black","black"]
+
     };
   },
   watch: {
+
     search(nv, ov) {
       let vue = this;
       setTimeout(
@@ -262,18 +930,59 @@ export default {
     }
   },
   methods: {
+
+    searchState(status, index){
+      let vue = this;
+      console.log(vue.filteredOrders);
+      vue.filteredOrders.splice(0, vue.filteredOrders.length);
+      if(status === 'all'){
+        //console.log("success");
+        for(let i = 0; i < vue.originOrders.length; i++){
+          vue.filteredOrders.push(vue.originOrders[i]);
+        }
+      }
+      else{
+        for(let i = 0; i < vue.originOrders.length; i++){
+          if(vue.originOrders[i].status === status){
+            console.log("su2");
+            vue.filteredOrders.push(vue.originOrders[i]);
+          }
+        }
+      }
+
+      vue.sortColor = ["black","black","black","black","black","black"];
+      vue.sortColor[index] = "red";
+
+
+    },
+
     colorStatus(status) {
       let colorTable = {
-        paid: "green",
+        paid: "black",
         notPaid: "red",
-        invalid: "gray",
-        canceled: "gray",
-        cooking: "pink",
-        sending: "cyan",
-        got: "purple"
+        invalid: "black",
+        canceled: "black",
+        cooking: "black",
+        sending: "black",
+        got: "black"
       };
       return colorTable[status];
     },
+
+    Status(status) {
+      let statusTable = {
+        paid: "等待发货",
+        notPaid: "等待支付!!",
+        invalid: "gray",
+        canceled: "订单取消",
+        cooking: "pink",
+        sending: "等待送达",
+        got: "完成订单",
+        timeout: "订单超时"
+      };
+      return statusTable[status];
+    },
+
     showQRcode(order) {
       if (order.status == "notPaid") this.QRcode = true;
     },
@@ -370,10 +1079,32 @@ export default {
     }
   },
   created() {
-    let app = this;
+
+
+
+     let app = this;
+    //  for(let i = 0; i < app.orders.length; i++){
+    //    app.orders[i].createTime = app.orders[i].createTime.substring(0, app.orders[i].createTime.length - 3);
+    //    app.orders[i].payTime = app.orders[i].payTime.substring(0, app.orders[i].payTime.length - 3);
+    //  }
+    //
+    // app.originOrders = app.orders;
+    // for(let i = 0; i < app.originOrders.length; i++){
+    //   app.filteredOrders.push(app.originOrders[i]);
+    //
+    // }
     axios.get("/api/orders").then(res => {
       app.orders = res.data;
-      app.filteredOrders = app.orders;
+      for(let i = 0; i < app.orders.length; i++){
+        app.orders[i].createTime = app.orders[i].createTime.substring(0, app.orders[i].createTime.length - 3);
+        app.orders[i].payTime = app.orders[i].payTime.substring(0, app.orders[i].payTime.length - 3);
+      }
+
+      app.originOrders = app.orders;
+      for(let i = 0; i < app.originOrders.length; i++){
+        app.filteredOrders.push(app.originOrders[i]);
+
+      }
     });
   }
 };
