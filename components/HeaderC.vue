@@ -84,7 +84,7 @@ export default {
           }
         },
         {
-          icon: "fullscreen_exit",
+          icon: "transit_enterexit",
           href: "/yummy/login",
           title: "登出系统",
           click: e => {

@@ -16,7 +16,7 @@
                     <v-layout class="lightbox white--text" align-center justify-space-between>
                         <div>
                               <v-avatar size="100">
-                            <img src="/shopLogo.png">
+                            <img :src="'/'+shop.id+'.jpg'">
                         </v-avatar>
                         <span class="title">{{shop.name}} <v-icon color="white">place</v-icon> {{shop.address.name}}  </span>
                         </div>

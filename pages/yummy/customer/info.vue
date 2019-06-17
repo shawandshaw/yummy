@@ -78,7 +78,7 @@
               <v-container>
                 <v-layout fill-height align-center justify-center>
                   <v-flex xs6 sm4 md3>
-                    <v-avatar size="300px">
+                    <v-avatar size="250px">
                       <img src="../../../assets/avatar.png" alt="Avatar">
                     </v-avatar>
                   </v-flex>

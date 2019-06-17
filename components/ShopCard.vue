@@ -1,8 +1,9 @@
 <template>
   <v-hover>
-    <v-card class="black--text" slot-scope="{ hover }">
-      <v-img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" aspect-ratio="1.618">
+    <v-card width="270" class="black--text" slot-scope="{ hover }">
+      <v-img style="width:270px" :src="'/'+shop.id+'.jpg'" aspect-ratio="1.618">
       </v-img>
+      <v-divider></v-divider>
       <v-layout>
         <v-flex>
           <v-card-title>
@@ -12,10 +13,9 @@
               </div>
               <div style="display: flex">
                 <v-rating :value="shop.rating" color="amber" dense half-increments readonly size="14"></v-rating>
-                <div class="ml-2 grey--text text--darken-2">
+                <!-- <div class="ml-2 grey--text text--darken-2">
                   <span>{{ shop.rating }}</span>
-                  <span>({{ shop.review }})</span>
-                </div>
+                </div> -->
               </div>
             </div>
           </v-card-title>
@@ -42,30 +42,31 @@
         <div v-if="hover"
           class="d-flex transition-fast-in-fast-out darken-2 v-card--reveal display-3 white--text"
           style="height: 100%;">
-          <v-list id="list" three-line style="height:100%; width: 100%;overflow-y: scroll;">
-            <template v-for="(item, index) in shop.items">
-              <v-subheader v-if="item.header" :key="item.header">
-                <v-layout justify-space-between>
-                  <div>
-                    <v-icon>thumb_up</v-icon>
-                    {{ item.header }}
-                  </div>
+          <v-list id="list" two-line style="height:100%; width: 100%;overflow-y: scroll;">
+            <v-subheader >
+                <v-layout justify-space-between align-center>
+                  <span>
+                    <v-icon small color='red'>whatshot</v-icon>
+                    特色菜品
+                  </span>
                   <v-btn @click="bubleData()" color="light-blue" outline round style="height:100%;">
                     进店
                   </v-btn>
                 </v-layout>
               </v-subheader>
 
-              <v-divider v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
+            <template v-for="(item, index) in shop.recommendGoods">
+              
+              <v-divider :key="index"></v-divider>
 
-              <v-list-tile v-else :key="item.title" avatar @click="">
+              <v-list-tile :key="item.name" avatar @click=";">
                 <v-list-tile-avatar>
-                  <img :src="item.avatar">
+                  <img :src="'/'+item.name+'.jpg'">
                 </v-list-tile-avatar>
-
-                <v-list-tile-content>
-                  <v-list-tile-title v-html="item.title"></v-list-tile-title>
-                  <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+               
+                <v-list-tile-content align-center>
+                  <v-list-tile-title v-html="item.name"></v-list-tile-title>
+                  <v-list-tile-sub-title>{{item.price}}元/份</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </template>
