@@ -1,10 +1,10 @@
 <template>
-  <v-app id="login">
+  <v-app id="login" >
     <v-container fluid fill-height>
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4>
           <v-card class="elevation-12">
-            <v-toolbar dark color="blue-grey darken-2">
+            <v-toolbar dark color="primary">
               <v-toolbar-title>登录</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon large>
@@ -43,7 +43,7 @@
                 <v-icon>arrow_back</v-icon>注册
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="blue-grey darken-2" class="white--text" @click="submit">登录</v-btn>
+              <v-btn color="primary" class="white--text" @click="submit">登录</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>

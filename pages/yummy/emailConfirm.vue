@@ -4,7 +4,7 @@
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4>
           <v-card class="elevation-12">
-            <v-toolbar dark color="blue-grey darken-2">
+            <v-toolbar dark color="primary">
               <v-toolbar-title>Email Confirm Result</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon large>
@@ -14,7 +14,7 @@
             <v-card-text>验证成功，请前往登录页登录</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue-grey darken-2" class="white--text" to="/yummy/login">Go to Sign in</v-btn>
+              <v-btn color="primary" class="white--text" to="/yummy/login">Go to Sign in</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>

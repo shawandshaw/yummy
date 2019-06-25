@@ -81,7 +81,7 @@
         </v-card>
         <v-dialog v-model="infoDialog" width="500">
           <v-card class="elevation-12">
-            <v-toolbar dark color="blue-grey darken-2">
+            <v-toolbar dark color="primary">
               <v-toolbar-title>Info Edit</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon large>
@@ -160,7 +160,7 @@
                 <v-icon>arrow_back</v-icon>cancel
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="blue-grey darken-2" @click="submit" class="white--text">Change</v-btn>
+              <v-btn color="primary" @click="submit" class="white--text">Change</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>

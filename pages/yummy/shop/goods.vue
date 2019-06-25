@@ -141,7 +141,7 @@
                         <v-icon>arrow_back</v-icon>cancel
                       </v-btn>
                       <v-spacer></v-spacer>
-                      <v-btn color="blue-grey darken-2" @click="saveGood" class="white--text">save</v-btn>
+                      <v-btn color="primary" @click="saveGood" class="white--text">save</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
@@ -381,7 +381,7 @@
                         <v-icon>arrow_back</v-icon>cancel
                       </v-btn>
                       <v-spacer></v-spacer>
-                      <v-btn color="blue-grey darken-2" @click="saveCombo" class="white--text">save</v-btn>
+                      <v-btn color="primary" @click="saveCombo" class="white--text">save</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>

@@ -1,5 +1,5 @@
 <template>
-  <v-footer  dark class="blue-grey darken-2 justify-center white-text" >
+  <v-footer  dark class="primary justify-center white-text" >
     用户统计：total: {{count.total}}，
     online: {{count.online}}
   </v-footer>

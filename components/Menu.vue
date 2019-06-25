@@ -4,6 +4,7 @@
       <v-avatar size="30px">
         <img src="@/assets/avatar.png" alt="Michael Wang">
       </v-avatar>
+      <v-icon>arrow_drop_down</v-icon>
     </v-btn>
     <v-list class="pa-0">
       <v-list-tile

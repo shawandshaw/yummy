@@ -3,7 +3,7 @@
     <v-container fluid fill-height>
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4>
-          <v-tabs grow color="blue-grey darken-2" dark icons-and-text>
+          <v-tabs grow color="primary" dark icons-and-text>
             <v-tabs-slider color="white"></v-tabs-slider>
 
             <v-tab href="#tab-customer" class="title">会员注册</v-tab>
@@ -57,7 +57,7 @@
                   </v-btn>
                   <v-spacer></v-spacer>
                   <v-btn
-                    color="blue-grey darken-2"
+                    color="primary"
                     @click="customerSignUP"
                     class="white--text"
                   >注册</v-btn>
@@ -145,7 +145,7 @@
                     <v-icon>arrow_back</v-icon>登录
                   </v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue-grey darken-2" @click="shopSignUP" class="white--text">注册</v-btn>
+                  <v-btn color="primary" @click="shopSignUP" class="white--text">注册</v-btn>
                 </v-card-actions>
               </v-card>
             </v-tab-item>

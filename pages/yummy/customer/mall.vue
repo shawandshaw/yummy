@@ -1,6 +1,7 @@
 <template>
   <v-app id="home">
-    <Header v-on:located="receiveLocation"></Header>
+    <Header v-show="isSigned" v-on:located="receiveLocation"></Header>
+    <HeaderTourist v-show="!isSigned" v-on:located="receiveLocation"></HeaderTourist>
     <v-content>
       <v-container grid-list-lg>
         <v-layout row wrap fill-height>
@@ -16,20 +17,22 @@
 <script>
   import Card from "@/components/ShopCard";
   import Header from "@/components/HeaderC";
+  import HeaderTourist from "@/components/HeaderTourist";
   import axios from "@/plugins/axios";
   import {
     distanceFunc
   } from "../../../utils/util";
-  import Mock from "mockjs"
 
   export default {
     components: {
       Card,
-      Header
+      Header,
+      HeaderTourist
     },
     data() {
       return {
-        shops: []
+        shops: [],
+        isSigned:false,
       };
     },
     methods: {
@@ -133,11 +136,23 @@
         // this.shops = shops;
       },
       goTo(shop) {
-        window.location.href = "/yummy/customer/shop?shopId=" + shop.id;
+        if(this.isSigned){
+          window.location.href = "/yummy/customer/shop?shopId=" + shop.id;
+        }else{
+          window.location.href = "/yummy/login"
+        }
       }
     },
     created: function () {
-      this.receiveLocation();
+      // this.receiveLocation();
+      axios.get('/api/login').then(res=>{
+        console.log(res.data=='signed')
+        if(res.data=='signed'){
+          this.isSigned=true;
+        }else if(res.data=='notSigned'){
+          this.isSigned=false;
+        }
+      })
     }
   };
 

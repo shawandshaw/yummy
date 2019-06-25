@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar color="blue-grey darken-2" fixed dark app>
+  <v-toolbar color="primary" fixed dark app>
     <v-toolbar-title class="headline">Yummy</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn flat class="title" href="/yummy/shop/promotion">促销</v-btn>
