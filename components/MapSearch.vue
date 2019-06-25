@@ -1,7 +1,7 @@
 
 <template>
   <v-card>
-    <v-toolbar color="pink" dark>
+    <v-toolbar color="primary" dark>
       <v-toolbar-title>
         <v-icon>place</v-icon>选择您的位置
       </v-toolbar-title>

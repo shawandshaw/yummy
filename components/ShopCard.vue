@@ -54,14 +54,13 @@
                   </v-btn>
                 </v-layout>
               </v-subheader>
-
+            <v-divider></v-divider>
             <template v-for="(item, index) in shop.recommendGoods">
               
-              <v-divider :key="index"></v-divider>
 
-              <v-list-tile :key="item.name" avatar @click=";">
+              <v-list-tile :key="item.id" avatar @click=";">
                 <v-list-tile-avatar>
-                  <img :src="'/img/'+shop.id+item.id+'.jpg'">
+                  <img :src="'/img/'+item.id+'.jpg'">
                 </v-list-tile-avatar>
                
                 <v-list-tile-content align-center>
@@ -69,6 +68,7 @@
                   <v-list-tile-sub-title>{{item.price}}元/份</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
+              <v-divider :key="index+'a'"></v-divider>
             </template>
           </v-list>
           <!-- <v-btn @click="bubleData()" flat dark style="height:100%; width:100%;font-size:0.8em;">

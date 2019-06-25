@@ -30,7 +30,7 @@
                 <v-layout row wrap fill-height>
                     <v-flex v-for="(good,index) in combos" v-bind:key="index+'combo'" lg3 md4 xs12>
                         <Card
-                            :url="'/'+good.name+'.jpg'"
+                            :url="'/img/'+good.id+'.jpg'"
                             :good="good"
                             type="套餐"
                             v-on:chosen="addToCart"
@@ -38,7 +38,7 @@
                     </v-flex>
                     <v-flex v-for="(good,index) in goods" v-bind:key="index" lg3 md4 xs12>
                         <Card
-                            :url="'/'+good.name+'.jpg'"
+                            :url="'/img/'+good.id+'.jpg'"
                             :good="good"
                             type="单品"
                             v-on:chosen="addToCart"
@@ -49,7 +49,7 @@
         </v-content>
         <v-dialog v-model="cartDialog" width="500">
             <v-card>
-                <v-toolbar color="pink" dark>
+                <v-toolbar color="primary" dark>
                     <v-toolbar-title>购物车</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-btn icon @click="cartItems=[];refreshCart();fetchGoods();">
@@ -82,12 +82,11 @@
                 <v-divider></v-divider>
 
                 <v-card-actions>
-                    <v-chip flat>总价 {{theOrder.originPrice}}元</v-chip>
+                    <v-chip outline >总价 {{theOrder.originPrice}}元</v-chip>
                     <v-spacer></v-spacer>
                     <v-btn
                         :disabled="this.cartItems.length==0"
                         color="primary"
-                        flat
                         class
                         @click="confirmOrder"
                     >下单</v-btn>
@@ -96,7 +95,7 @@
         </v-dialog>
         <v-dialog v-model="orderDialog" width="500">
             <v-card>
-                <v-toolbar color="pink" dark>
+                <v-toolbar color="primary" dark>
                     <v-toolbar-title>核对订单和地址</v-toolbar-title>
                     <v-spacer></v-spacer>
                 </v-toolbar>
@@ -111,7 +110,7 @@
                                 <v-list-tile-sub-title>{{ item.combo.description }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                             <v-list-tile-action>
-                                <span>{{ item.number }}</span>
+                                <span>{{ item.number+'份' }}</span>
                             </v-list-tile-action>
                         </v-list-tile>
                         <v-divider v-if="index + 1 < cartItems.length" :key="`divider-${index}`"></v-divider>
@@ -136,18 +135,17 @@
 
                 <v-divider></v-divider>
                 <v-card-actions>
-                    <v-chip flat>折前价 {{theOrder.originPrice}}元</v-chip>
+                    <v-chip outline>总价 {{theOrder.originPrice}}元</v-chip>
                     <v-chip
-                        flat
+                        outline
                         @click="promotionDialog=true"
                         v-if="theOrder.promotion.benefit<1"
                     >优惠 {{theOrder.promotion.benefit}}</v-chip>
-                    <v-chip flat>折后价 {{theOrder.realPrice}}元</v-chip>
+                    <v-chip outline>应付 {{theOrder.realPrice}}元</v-chip>
                     <v-spacer></v-spacer>
                     <v-btn
                         :disabled="this.cartItems.length==0||this.distance>20"
                         color="primary"
-                        flat
                         @click="makeOrder"
                     >确认下单</v-btn>
                 </v-card-actions>
@@ -155,7 +153,7 @@
         </v-dialog>
         <v-dialog v-model="promotionDialog" width="500">
             <v-card>
-                <v-toolbar color="pink" dark>
+                <v-toolbar color="primary" dark>
                     <v-toolbar-title>优惠详情</v-toolbar-title>
                     <v-spacer></v-spacer>
                 </v-toolbar>
@@ -177,7 +175,7 @@
                             readonly
                             required
                             name="name"
-                            label="优惠内容（小数代表折扣，负数代表满减）"
+                            label="折扣"
                             type="text"
                         ></v-text-field>
                         <v-text-field
@@ -223,9 +221,9 @@
                 <v-card-text v-if="orderResult.status=='fail'">{{orderResult.message}}</v-card-text>
 
                 <v-card-actions>
-                    <v-btn @click="resultDialog=false">稍后支付</v-btn>
+                    <v-btn color="primary" @click="resultDialog=false">稍后支付</v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn v-if="this.orderResult.status=='success'" @click="pay">立即支付</v-btn>
+                    <v-btn color="primary" v-if="this.orderResult.status=='success'" @click="pay">立即支付</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
