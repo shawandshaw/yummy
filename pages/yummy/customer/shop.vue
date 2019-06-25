@@ -10,13 +10,13 @@
         </Header>
 
         <v-content>
-            <v-img src="/dishes.jpg" style="filter: blur(5px)" height="150"></v-img>
+            <v-img src="/img/dishes.jpg" style="filter: blur(5px)" height="150"></v-img>
             <v-layout justify-center>
                 <v-container style="position:absolute;top:0;">
                     <v-layout class="lightbox white--text" align-center justify-space-between>
                         <div>
                               <v-avatar size="100">
-                            <img :src="'/'+shop.id+'.jpg'">
+                            <img :src="'/img/'+shop.id+'.jpg'">
                         </v-avatar>
                         <span class="title">{{shop.name}} <v-icon color="white">place</v-icon> {{shop.address.name}}  </span>
                         </div>

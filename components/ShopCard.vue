@@ -1,7 +1,7 @@
 <template>
   <v-hover>
     <v-card width="270" class="black--text" slot-scope="{ hover }">
-      <v-img style="width:270px" :src="'/'+shop.id+'.jpg'" aspect-ratio="1.618">
+      <v-img style="width:270px" :src="'/img/'+shop.id+'.jpg'" aspect-ratio="1.618">
       </v-img>
       <v-divider></v-divider>
       <v-layout>
@@ -61,7 +61,7 @@
 
               <v-list-tile :key="item.name" avatar @click=";">
                 <v-list-tile-avatar>
-                  <img :src="'/'+item.name+'.jpg'">
+                  <img :src="'/img/'+shop.id+item.id+'.jpg'">
                 </v-list-tile-avatar>
                
                 <v-list-tile-content align-center>
